@@ -245,6 +245,4 @@ function createGame(baseUrl, puzzle) {
     );
 }
 
-// Create and start game
-
 createGame(baseUrl, puzzle);
