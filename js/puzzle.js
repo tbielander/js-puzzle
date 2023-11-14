@@ -56,8 +56,6 @@ const puzzle = {
 function createGame(baseUrl, puzzle) {
     let start, stop;
 
-    // Create HTML puzzle
-
     function createPuzzle(baseUrl, matrix, piecesPaths, rectWidth, rectHeight) {
         let [m, n] = matrix;
         let stack = 0;
