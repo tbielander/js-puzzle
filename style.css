@@ -1,0 +1,9 @@
+div.result {
+    position: absolute;
+    left: 0;
+    top: 0;
+    padding: 20px;
+    background-color: #FAFAD2;
+    text-align: center;
+    font-size: 2.5em;
+}
