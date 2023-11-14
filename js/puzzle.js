@@ -208,8 +208,13 @@ function createGame(baseUrl, puzzle) {
             } else {
                 piece.style.pointerEvents = "none";
                 let [x, y] = getClientXY(e);
-                document.elementFromPoint(x, y)
-                .dispatchEvent(new MouseEvent("mousedown", {clientX: x, clientY: y}));
+                if (e.clientX) {
+                    document.elementFromPoint(x, y)
+                    .dispatchEvent(new MouseEvent("mousedown", {clientX: x, clientY: y}));
+                } else {
+                    document.elementFromPoint(x, y)
+                    .dispatchEvent(new TouchEvent("touchstart", {clientX: x, clientY: y}));
+                }         
                 piece.style.pointerEvents = "auto";
             }
         }
