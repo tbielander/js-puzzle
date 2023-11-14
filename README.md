@@ -1,0 +1,1 @@
+A game logic prototype for the puzzle app https://gitlab.switch.ch/ub-unibas/puzzle-app.
