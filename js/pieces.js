@@ -61,9 +61,7 @@ function setOffsets(piece, i, j, svgPath, rectWidth, rectHeight) {
     let svg = document.getElementById("svg");
     let pathElement = document.getElementById("path");
     pathElement.setAttribute("d", svgPath);
-    console.log(pathElement);
     let box = svg.getBBox();
-    console.log(box);
     let offsetX = j * rectWidth + box["x"];
     let offsetY = i * rectHeight + box["y"];
     piece.setAttribute("data-offset-x", String(offsetX));

@@ -123,7 +123,9 @@ function createGame(baseUrl, puzzle) {
 
             function drop() {
                 document.onmouseup = null;
+                document.ontouchend = null;
                 document.onmousemove = null;
+                document.ontouchmove = null;
             }
 
             function catchPiece(pc, nbr, targetX, targetY) {
@@ -148,12 +150,25 @@ function createGame(baseUrl, puzzle) {
                 }
             }
 
+            function getClientXY(e) {
+                let x, y;
+                if (e.clientX) {
+                    x = e.clientX;
+                    y = e.clientY;
+                } else {
+                    x = e.touches[0].clientX;
+                    y = e.touches[0].clientY;
+                }
+                return [x, y];
+            }
+
             function drag(e) {
                 e.preventDefault();
-                deltaX = e.clientX - startX;
-                deltaY = e.clientY - startY;
-                startX = e.clientX;
-                startY = e.clientY;
+                let [clientX, clientY] = getClientXY(e);
+                deltaX = clientX - startX;
+                deltaY = clientY - startY;
+                startX = clientX;
+                startY = clientY;
                 for (let pc of compoundPieces) {
                     move(pc, deltaX, deltaY);
                     let unconnectedNbrs = unconnected[pc.id];
@@ -168,8 +183,7 @@ function createGame(baseUrl, puzzle) {
             
             function startDragging(e) {
                 e.preventDefault();
-                startX = e.clientX;
-                startY = e.clientY;
+                [startX, startY] = getClientXY(e);
                 compound = getCompound(piece.id);
                 for (let id of compound) {
                     let pc = document.getElementById(id);
@@ -185,7 +199,9 @@ function createGame(baseUrl, puzzle) {
                     unconnected[id] = unconnectedNbrs;
                 }            
                 document.onmouseup = drop;
+                document.ontouchend = drop;
                 document.onmousemove = drag;
+                document.ontouchmove = drag;
             }
             
             if (checkAlpha(e, piece)) {
@@ -193,8 +209,7 @@ function createGame(baseUrl, puzzle) {
                 startDragging(e);
             } else {
                 piece.style.pointerEvents = "none";
-                let x = e.clientX;
-                let y = e.clientY;
+                let [x, y] = getClientXY(e);
                 document.elementFromPoint(x, y)
                 .dispatchEvent(new MouseEvent("mousedown", {clientX: x, clientY: y}));
                 piece.style.pointerEvents = "auto";
@@ -211,6 +226,7 @@ function createGame(baseUrl, puzzle) {
                     piece = setAttributes(piece, i, j, m, n);
                     piece = setOffsets(piece, i, j, svgPath, rectWidth, rectHeight);
                     piece.onmousedown = dragAndDrop;
+                    piece.ontouchstart = dragAndDrop;
                     compounds.push(new Set([piece.id]));
                     document.body.appendChild(piece);
                 }
