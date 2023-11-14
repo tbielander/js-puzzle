@@ -7,3 +7,7 @@ div.result {
     text-align: center;
     font-size: 2.5em;
 }
+
+img.piece {
+    position: absolute;
+}

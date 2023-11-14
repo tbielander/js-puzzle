@@ -35,7 +35,6 @@ function setAttributes(piece, i, j, m, n) {
     piece.setAttribute("data-j", j);
     piece.style.width = toCSS(piece.width);
     piece.style.height = toCSS(piece.height);
-    piece.style.position = "absolute";
     piece.style.left = toCSS(Math.random() * (window.innerWidth - piece.width));
     piece.style.top = toCSS(Math.random() * (window.innerHeight - piece.height));
     let neighbours = determineNeighbours(i, j, m, n);
