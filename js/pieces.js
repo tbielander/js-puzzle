@@ -56,17 +56,27 @@ function setAttributes(piece, i, j, m, n) {
     return piece;
 }
 
-function checkAlpha(e, piece) {
-    let ctx = document.getElementById("canvas").getContext("2d");
+// function checkAlpha(e, piece) {
+//     let ctx = document.getElementById("canvas").getContext("2d");
+//     let [clientX, clientY] = getClientXY(e);
+//     let x = clientX - piece.offsetLeft;
+//     let y = clientY - piece.offsetTop;
+//     let w = ctx.canvas.width = piece.width;
+//     let h = ctx.canvas.height = piece.height;
+//     let alpha;
+//     ctx.drawImage(piece, 0, 0, w, h);
+//     alpha = ctx.getImageData(x, y, 1, 1).data[3]; // [0]R [1]G [2]B [3]A
+//     return alpha !== 0;
+// }
+
+function insideShape(e, piece) {
     let [clientX, clientY] = getClientXY(e);
-    let x = clientX - piece.offsetLeft;
-    let y = clientY - piece.offsetTop;
-    let w = ctx.canvas.width = piece.width;
-    let h = ctx.canvas.height = piece.height;
-    let alpha;
-    ctx.drawImage(piece, 0, 0, w, h);
-    alpha = ctx.getImageData(x, y, 1, 1).data[3]; // [0]R [1]G [2]B [3]A
-    return alpha !== 0;
+    let x = clientX - piece.offsetLeft - piece.getAttribute("data-x");
+    let y = clientY - piece.offsetTop - piece.getAttribute("data-y");
+    let pathElement = document.getElementById("path");
+    let path = piece.getAttribute("data-svg-path");
+    pathElement.setAttribute("d", path);
+    return pathElement.isPointInFill(new DOMPoint(x, y));
 }
 
 function setOffsets(piece, i, j, svgPath, rectWidth, rectHeight) {
@@ -74,12 +84,13 @@ function setOffsets(piece, i, j, svgPath, rectWidth, rectHeight) {
     let pathElement = document.getElementById("path");
     pathElement.setAttribute("d", svgPath);
     let box = svg.getBBox();
-    let offsetX = j * rectWidth + box["x"];
-    let offsetY = i * rectHeight + box["y"];
+    piece.setAttribute("data-x", String(-box.x));
+    piece.setAttribute("data-y", String(-box.y));
+    let offsetX = j * rectWidth + box.x;
+    let offsetY = i * rectHeight + box.y;
     piece.setAttribute("data-offset-x", String(offsetX));
     piece.setAttribute("data-offset-y", String(offsetY));
     piece.setAttribute("data-svg-path", svgPath);
-    console.log(piece);
     pathElement.setAttribute("d", "");
     return piece;
 }

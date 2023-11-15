@@ -190,7 +190,7 @@ function createGame(baseUrl, puzzle) {
                 document.ontouchmove = drag;
             }
             
-            if (checkAlpha(e, piece)) {
+            if (insideShape(e, piece)) {  // checkAlpha(e, piece)
                 stack = piece.style.zIndex = stack + 1;
                 startDragging(e);
             } else {
