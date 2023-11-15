@@ -8,6 +8,18 @@ function toCSS(number) {
     return `${number}px`;
 }
 
+function getClientXY(e) {
+    let x, y;
+    if (e.clientX) {
+        x = e.clientX;
+        y = e.clientY;
+    } else {
+        x = e.touches[0].clientX;
+        y = e.touches[0].clientY;
+    }
+    return [x, y];
+}
+
 // Piece properties
 
 function getPieceIndexes(imagePath) {
@@ -46,8 +58,9 @@ function setAttributes(piece, i, j, m, n) {
 
 function checkAlpha(e, piece) {
     let ctx = document.getElementById("canvas").getContext("2d");
-    let x = e.clientX - piece.offsetLeft;
-    let y = e.clientY - piece.offsetTop;
+    let [clientX, clientY] = getClientXY(e);
+    let x = clientX - piece.offsetLeft;
+    let y = clientY - piece.offsetTop;
     let w = ctx.canvas.width = piece.width;
     let h = ctx.canvas.height = piece.height;
     let alpha;

@@ -148,18 +148,6 @@ function createGame(baseUrl, puzzle) {
                 }
             }
 
-            function getClientXY(e) {
-                let x, y;
-                if (e.clientX) {
-                    x = e.clientX;
-                    y = e.clientY;
-                } else {
-                    x = e.touches[0].clientX;
-                    y = e.touches[0].clientY;
-                }
-                return [x, y];
-            }
-
             function drag(e) {
                 e.preventDefault();
                 let [clientX, clientY] = getClientXY(e);
