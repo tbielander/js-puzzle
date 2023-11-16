@@ -73,7 +73,7 @@ function insideShape(e, piece) {
     let [clientX, clientY] = getClientXY(e);
     let x = clientX - piece.offsetLeft - piece.getAttribute("data-x");
     let y = clientY - piece.offsetTop - piece.getAttribute("data-y");
-    let pathElement = document.getElementById("path");
+    let pathElement = document.getElementById("path-element");
     let path = piece.getAttribute("data-svg-path");
     pathElement.setAttribute("d", path);
     return pathElement.isPointInFill(new DOMPoint(x, y));
@@ -81,7 +81,7 @@ function insideShape(e, piece) {
 
 function setOffsets(piece, i, j, svgPath, rectWidth, rectHeight) {
     let svg = document.getElementById("svg");
-    let pathElement = document.getElementById("path");
+    let pathElement = document.getElementById("path-element");
     pathElement.setAttribute("d", svgPath);
     let box = svg.getBBox();
     piece.setAttribute("data-x", String(-box.x));

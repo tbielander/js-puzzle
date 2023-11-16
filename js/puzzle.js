@@ -71,7 +71,7 @@ function createGame(baseUrl, puzzle) {
         function dragAndDrop(e) {      
             e.preventDefault();
             let piece = this;
-            let startX = 0, startY = 0, deltaX = 0, deltaY = 0;
+            let startX = 0, startY = 0, dx = 0, dy = 0;
             let compound = new Set();
             let compoundPieces = [];
             let unconnected = {};
@@ -82,9 +82,9 @@ function createGame(baseUrl, puzzle) {
                 }
             }
 
-            function move(pc, deltaX, deltaY) {
-                pc.style.left = toCSS(pc.offsetLeft + deltaX);
-                pc.style.top = toCSS(pc.offsetTop + deltaY);
+            function move(pc, dx, dy) {
+                pc.style.left = toCSS(pc.offsetLeft + dx);
+                pc.style.top = toCSS(pc.offsetTop + dy);
             }
 
             function completeGame() {
@@ -148,15 +148,29 @@ function createGame(baseUrl, puzzle) {
                 }
             }
 
+            function checkBorderCollision(pcs) {    
+                return {
+                    "left": pcs.some(pc => pc.offsetLeft <= 0),
+                    "top": pcs.some(pc => pc.offsetTop <= 0),
+                    "right": pcs.some(pc => pc.offsetLeft + pc.width >= window.innerWidth),
+                    "bottom": pcs.some(pc => pc.offsetTop + pc.height >= window.innerHeight)
+                };
+            }
+
             function drag(e) {
                 e.preventDefault();
                 let [clientX, clientY] = getClientXY(e);
-                deltaX = clientX - startX;
-                deltaY = clientY - startY;
+                dx = clientX - startX;
+                dy = clientY - startY;
                 startX = clientX;
                 startY = clientY;
+                let borderCollision = checkBorderCollision(compoundPieces);
+                if (borderCollision.left && dx < 0) dx = 0;
+                if (borderCollision.top && dy < 0) dy = 0;
+                if (borderCollision.right && dx > 0) dx = 0;
+                if (borderCollision.bottom && dy > 0) dy = 0;
                 for (let pc of compoundPieces) {
-                    move(pc, deltaX, deltaY);
+                    move(pc, dx, dy);
                     let unconnectedNbrs = unconnected[pc.id];
                     if (unconnectedNbrs && unconnectedNbrs.length > 0) {
                         for (let nbr of unconnectedNbrs) {
