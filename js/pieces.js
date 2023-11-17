@@ -70,7 +70,7 @@ function setAttributes(piece, i, j, m, n) {
 // }
 
 function insideShape(e, piece) {
-    let [clientX, clientY] = getClientXY(e, 0, 0);
+    let [clientX, clientY] = getClientXY(e);
     let x = clientX - piece.offsetLeft - piece.getAttribute("data-x");
     let y = clientY - piece.offsetTop - piece.getAttribute("data-y");
     let pathElement = document.getElementById("path-element");
