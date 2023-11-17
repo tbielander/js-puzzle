@@ -10,12 +10,12 @@ function toCSS(number) {
 
 function getClientXY(e) {
     let x, y;
-    if (e.clientX) {
-        x = e.clientX;
-        y = e.clientY;
-    } else {
+    if (e.type.includes("touch")) {
         x = e.touches[0].clientX;
         y = e.touches[0].clientY;
+    } else {
+        x = e.clientX;
+        y = e.clientY;
     }
     return [x, y];
 }
@@ -70,7 +70,7 @@ function setAttributes(piece, i, j, m, n) {
 // }
 
 function insideShape(e, piece) {
-    let [clientX, clientY] = getClientXY(e);
+    let [clientX, clientY] = getClientXY(e, 0, 0);
     let x = clientX - piece.offsetLeft - piece.getAttribute("data-x");
     let y = clientY - piece.offsetTop - piece.getAttribute("data-y");
     let pathElement = document.getElementById("path-element");

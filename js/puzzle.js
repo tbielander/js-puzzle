@@ -116,7 +116,6 @@ function createGame(baseUrl, puzzle) {
                     compoundPieces = [];
                     unconnected = {};
                 }
-                console.log(compounds);
             }
 
             function drop() {
@@ -197,7 +196,7 @@ function createGame(baseUrl, puzzle) {
                         }
                     }
                     unconnected[id] = unconnectedNbrs;
-                }            
+                }
                 document.onmouseup = drop;
                 document.ontouchend = drop;
                 document.onmousemove = drag;
@@ -210,13 +209,13 @@ function createGame(baseUrl, puzzle) {
             } else {
                 piece.style.pointerEvents = "none";
                 let [x, y] = getClientXY(e);
-                if (e.clientX) {
+                if (e.type === "touchstart") {
                     document.elementFromPoint(x, y)
-                    .dispatchEvent(new MouseEvent("mousedown", {clientX: x, clientY: y}));
+                    .dispatchEvent(new TouchEvent(e.type, {clientX: x, clientY: y}));
                 } else {
                     document.elementFromPoint(x, y)
-                    .dispatchEvent(new TouchEvent("touchstart", {clientX: x, clientY: y}));
-                }         
+                    .dispatchEvent(new MouseEvent(e.type, {clientX: x, clientY: y}));
+                }  
                 piece.style.pointerEvents = "auto";
             }
         }
