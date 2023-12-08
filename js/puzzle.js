@@ -75,6 +75,7 @@ function createGame(baseUrl, puzzle) {
             let compound = new Set();
             let compoundPieces = [];
             let unconnected = {};
+            let cLock = false;
             
             function getCompound(pieceID) {
                 for (let c of compounds) {
@@ -109,6 +110,7 @@ function createGame(baseUrl, puzzle) {
                     c => !(c.has(pcID) || c.has(nbrID))
                 );
                 compounds.push(union);
+                console.log(compounds);
                 if (compounds.length === 1 && compounds[0].size === m * n) {
                     completeGame();
                 } else {
@@ -127,6 +129,8 @@ function createGame(baseUrl, puzzle) {
 
             function catchPiece(pc, nbr, targetX, targetY) {
                 drop();
+                if (cLock) return;
+                cLock = true;   
                 let deltaX = targetX - pc.offsetLeft;
                 let deltaY = targetY - pc.offsetTop;
                 for (let piece of compoundPieces) {
@@ -233,6 +237,22 @@ function createGame(baseUrl, puzzle) {
                     piece.ontouchstart = dragAndDrop;
                     compounds.push(new Set([piece.id]));
                     document.body.appendChild(piece);
+
+                    const slideInKeyframes = new KeyframeEffect(
+                        piece,
+                        [
+                            { transform: `translate(${toCSS(window.innerWidth)}, ${toCSS(window.innerHeight)})` },
+                            { transform: "translate(0)" }
+                        ],
+                        { duration: 300 + Math.random() * 300, easing: "ease-out" }
+                    );
+                                       
+                    const slideInAnimation = new Animation(
+                        slideInKeyframes,
+                        document.timeline
+                    );
+
+                    slideInAnimation.play();
                 }
                 piece.src = baseUrl + filePath;
             }
